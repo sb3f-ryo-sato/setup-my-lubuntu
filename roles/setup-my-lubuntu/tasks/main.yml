@@ -1,0 +1,53 @@
+---
+# tasks file for setup-my-lubuntu
+- name: Setup apt mirror
+  become: yes
+  ansible.builtin.template:
+    src: sources.list.j2
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Remove packages
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - libreoffice*
+    - firefox*
+
+- name: apt autoremove
+  become: yes
+  apt:
+    autoremove: yes
+
+- name: apt upgrade
+  become: yes
+  apt:
+    name: "*"
+    update_cache: yes
+    state: latest
+
+- name: Install packages
+  become: yes
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: latest
+  loop:
+    ## Remote
+    - xrdp
+    - fonts-mplus
+    - fcitx-mozc
+    ## Tools
+    - git
+    - emacs
+    - screen
+
+# https://www.spacemacs.org/
+- name: Install spacemacs
+  ansible.builtin.git:
+    repo: https://github.com/syl20bnr/spacemacs
+    dest: ~/.emacs.d

@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  roles:
+    - setup-my-lubuntu
+    - prepare-virtualbox-guest-additions
+    - install-awscli
+    - install-terraform
+    - install-serverless

@@ -1,0 +1,37 @@
+---
+# tasks file for install-terraform
+# https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started
+
+# sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+- name: Ensure that your system is up to date, and you have the gnupg, software-properties-common, and curl packages installed.
+  become: yes
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: latest
+  loop:
+    - gnupg
+    - software-properties-common
+    - curl
+
+# curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+- name: Add the HashiCorp GPG key.
+  become: yes
+  ansible.builtin.apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+# sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+- name: Add the official HashiCorp Linux repository.
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_facts.lsb.codename }} main
+    state: present
+
+# sudo apt-get update && sudo apt-get install terraform
+- name: Update to add the repository, and install the Terraform CLI.
+  become: yes
+  apt:
+    name: terraform
+    update_cache: yes
+    state: latest

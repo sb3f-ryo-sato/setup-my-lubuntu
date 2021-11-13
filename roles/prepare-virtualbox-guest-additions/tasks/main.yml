@@ -1,0 +1,12 @@
+---
+# tasks file for prepare-virtualbox-guest-additions
+- name: Install packages for VirtualBox Guest Additions
+  become: yes
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: latest
+  loop:
+    - gcc
+    - make
+    - perl

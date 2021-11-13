@@ -1,0 +1,4 @@
+---
+# defaults file for setup-my-lubuntu
+ubuntu_archive_path: ftp.riken.go.jp/Linux
+ubuntu_security_path: security.ubuntu.com

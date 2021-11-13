@@ -1,0 +1,22 @@
+---
+# tasks file for install-serverless
+
+# https://python-poetry.org/docs/
+- name: Download Poetry installer
+  get_url:
+    url: https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
+    dest: /var/tmp
+    mode: '0644'
+
+- name: Install Poetry
+  ansible.builtin.command: python3 /var/tmp/get-poetry.py
+
+# https://www.serverless.com/framework/docs/getting-started
+- name: Download Serverless Framework
+  get_url:
+    url: https://slss.io/install
+    dest: /var/tmp
+    mode: '0644'
+
+- name: Install Serverless Framework
+  ansible.builtin.command: bash /var/tmp/install.sh

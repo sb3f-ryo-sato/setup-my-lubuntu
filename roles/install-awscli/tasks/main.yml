@@ -1,0 +1,32 @@
+---
+# tasks file for install-awscli
+# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+- name: Install packages
+  become: yes
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: latest
+  loop:
+    - unzip
+    - libc6
+    - groff
+    - less
+
+- name: Download and extract installer
+  become: yes
+  ansible.builtin.unarchive:
+    src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /usr/local/src
+    remote_src: yes
+
+- name: Get stats of a aws cli
+  ansible.builtin.stat:
+    path: /usr/local/aws-cli/v2/current
+  register: st
+
+- name: Install AWS CLI
+  become: yes
+  ansible.builtin.command: /usr/local/src/aws/install
+  when: st.stat.exists == False
